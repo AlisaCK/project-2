@@ -3,6 +3,11 @@ object homework4  {
     
     var people : List[List[Array[String]]] = List()
 
+    def filterChains(): List[List[Array[String]]] = { 
+        var newList = people.map(person => person.filter{_(1).equals("Chain")})
+        return newList
+    }
+
     def main(args: Array[String]) {
 
         //println("Month, Income, Expenses, Profit")
@@ -23,6 +28,14 @@ object homework4  {
         people = tempPeople.map(person => person.map(x =>x.split(",").map(_.trim))).toList
         for(lines <- people){
             println(lines(1)(0))
+        }
+        var list = filterChains()
+        //var list = people.map(person => person.filter{_(1).equals("Chain")})
+
+        for(person <- list){
+            for(restaurants <- person){
+                println(restaurants(1))
+            }
         }
 
         //val bufferLocalRes = io.Source.fromFile(arg(0))
