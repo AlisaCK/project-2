@@ -37,6 +37,19 @@ object homework4  {
                 println(restaurants(1))
             }
         }
+        
+        var bop = list.map(person => person.groupBy(_(2)))
+        var cuisineAverage = bop.map( person => person.map{ case (k,v) => (k, ((v.map(_(4).toInt).sum/v.length), v.length))})
+        //List[Map[String,List[Array[Int]]]]
+        //v is list of restaurants of a type of cuisine
+        
+        for(person <- cuisineAverage ){
+            for(restaurants <- person){
+                println(restaurants)
+            }
+            println("wow")
+        }
+        
 
         //val bufferLocalRes = io.Source.fromFile(arg(0))
         // for (line <- bufferLocalRes.getLines) {
