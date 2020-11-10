@@ -1,7 +1,7 @@
 object homework4  {
     var localRestaurants : List[Array[String]] = List()
     
-    val people : List[List[(String, String,String, String, String)]] = List()
+    var people : List[List[Array[String]]] = List()
 
     def main(args: Array[String]) {
 
@@ -9,9 +9,22 @@ object homework4  {
         //first argument load in local restaurants
         val temp: List[String] = io.Source.fromFile(args(0)).getLines.toList
         localRestaurants = temp.map(x => x.split(",").map(_.trim))
-        for(lines <- localRestaurants){
-            print(lines(0))
+
+        // for(lines <- localRestaurants){
+        //     print(lines(0))
+        // }
+
+        val tempArgs = args.indices.collect{case i if i > 0 => args(i)} //only the people file
+        //create list of lists (unparsed lines)
+        val tempPeople = tempArgs.map(arg => io.Source.fromFile(arg).getLines.toList)
+        for(lines <- tempPeople){
+            println(lines(0))
         }
+        people = tempPeople.map(person => person.map(x =>x.split(",").map(_.trim))).toList
+        for(lines <- people){
+            println(lines(1)(0))
+        }
+
         //val bufferLocalRes = io.Source.fromFile(arg(0))
         // for (line <- bufferLocalRes.getLines) {
         //     val cols = line.split(",").map(_.trim)
