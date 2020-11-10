@@ -30,6 +30,7 @@ object homework4  {
             println(lines(1)(0))
         }
         var list = filterChains()
+        var numList = list.map(people => people.length)
         //var list = people.map(person => person.filter{_(1).equals("Chain")})
 
         for(person <- list){
@@ -39,7 +40,7 @@ object homework4  {
         }
         
         var bop = list.map(person => person.groupBy(_(2)))
-        var cuisineAverage = bop.map( person => person.map{ case (k,v) => (k, ((v.map(_(4).toInt).sum/v.length), v.length))})
+        var cuisineAverage = bop.map( person => person.map{ case (k,v) => (k, List((v.map(_(4).toInt).sum.toDouble/v.length), v.length))})
         //List[Map[String,List[Array[Int]]]]
         //v is list of restaurants of a type of cuisine
         
@@ -49,7 +50,14 @@ object homework4  {
             }
             println("wow")
         }
-        
+
+        var adjustedAverage = cuisineAverage.map(person => person.map{case (k,v) => (k,(v.product/numList(cuisineAverage.indexOf(person))))})
+        for(person <- adjustedAverage ){
+            for(restaurants <- person){
+                println(restaurants)
+            }
+            println("wow")
+        }
 
         //val bufferLocalRes = io.Source.fromFile(arg(0))
         // for (line <- bufferLocalRes.getLines) {
