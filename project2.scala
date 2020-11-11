@@ -62,11 +62,10 @@ object homework4  {
 
         //--------------------TRAY------------------------------
         //CHECK IF NEXT IS EMPTY FOR IF STATEMENT HERE
-
+		if (!next.isEmpty) {
         //retrieve restaurant with highest score
         //if there are no restaurants, maxBy throws error so must check for no restaurants before this 
-        var (restaurant, score) = next.maxBy(_._2)
-        if (restaurant != None) {
+			var (restaurant, score) = next.maxBy(_._2)
 			var hello = restaurant.toArray
 			print("Your party should go to: ")
 			println(hello(0)(0))
@@ -92,16 +91,17 @@ object homework4  {
 			
 			var filtered = union.map{case (k,v) => (localRestaurants.find(_(1) == k), v)}
 			filtered = filtered.filterKeys(_ != None)
-			var (res, sc) = filtered.maxBy(_._2)
-			if (res != None) {
+			
+			if (filtered.isEmpty) {
+				var (res, sc) = filtered.maxBy(_._2)
 				var goodbye = res.toArray
 				print("Your party should go to: ")
 				println(goodbye(0)(0))
 			}
 			else {
-				var name = restaurant.toArray
+				var name = localRestaurants.toArray
 				print("Your party should go to: ")
-				println(name(0)(0))
+				println(name(1)(0))
 			}
 		}
 
