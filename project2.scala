@@ -1,4 +1,4 @@
-object homework4  {
+object project 2 {
     //global variable for local restaurants
     var localRestaurants : List[Array[String]] = List()
     //global var with list of peoples data
@@ -60,8 +60,7 @@ object homework4  {
         //filter out cuisines that could not be found
         next = next.filterKeys(_ != None)
 
-        //--------------------TRAY------------------------------
-        //CHECK IF NEXT IS EMPTY FOR IF STATEMENT HERE
+        //check if step 4 has available restaurants
 		if (!next.isEmpty) {
         //retrieve restaurant with highest score
         //if there are no restaurants, maxBy throws error so must check for no restaurants before this 
@@ -70,24 +69,10 @@ object homework4  {
 			print("Your party should go to: ")
 			println(hello(0)(0))
 		}	
-        // var tempp  = localRestaurants.find(_(1) == rest) 
-        // var restaurant = tempp match {
-        //     case None => localRestaurants(1)//Or handle the lack of a value another way: throw an error, etc.
-        //     case Some(v) => v.toArray //return the string to set your value
-        // }
-        // print("Your party should go to: ")
-        // println(restaurant(0))
-        // for(restaurants <- restaurant){
-        //     println(restaurants)
-        // }
-        //println("intersects")
+        //if not, switch to step 5
 		else {
 			var union = mergeMap(adjustedAverage)((v1, v2) => v1 + v2)
 			
-			//for(restaurants <- union){
-			//    println(restaurants)
-			//}
-			//println("union")
 			
 			var filtered = union.map{case (k,v) => (localRestaurants.find(_(1) == k), v)}
 			filtered = filtered.filterKeys(_ != None)
@@ -98,36 +83,13 @@ object homework4  {
 				print("Your party should go to: ")
 				println(goodbye(0)(0))
 			}
+            //step 6
 			else {
 				var name = localRestaurants.toArray
 				print("Your party should go to: ")
 				println(name(1)(0))
 			}
 		}
-
-        //logistics to retrieve restaurant name
-        
-    
-        //val bufferLocalRes = io.Source.fromFile(arg(0))
-        // for (line <- bufferLocalRes.getLines) {
-        //     val cols = line.split(",").map(_.trim)
-        //     localRestaurants += ((s"${cols(0)}" ->List(s"${cols(1)}", s"${cols(2)}"))
-        //     // do whatever you want with the columns here
-        //     //println(s"${cols(0)}|${cols(1)}|${cols(2)}|${cols(3)}")
-        // }
-        // bufferLocalRes.close
-        //rest of arguments load into people list
-        // for(i <- 1 to args.length-1){
-        //     val bufferPeople = io.Source.fromFile(arg(i))
-        //     for (line <- bufferPeople.getLines) {
-        //         val cols = line.split(",").map(_.trim)
-        //         people
-        //         peopleRes += ((s"${cols(0)}" ->List(s"${cols(1)}", s"${cols(2)}"))
-        //         // do whatever you want with the columns here
-        //         //println(s"${cols(0)}|${cols(1)}|${cols(2)}|${cols(3)}")
-        //     }
-        //     bufferLocalRes.close
-        // }
 
         
     } 
