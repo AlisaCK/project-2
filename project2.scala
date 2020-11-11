@@ -55,7 +55,7 @@ object homework4  {
         //     }
         //     println("wow")
         // }
-
+		println(localRestaurants(1).toArray.toString)
         var adjustedAverage = cuisineAverage.map(person => person.map{case (k,v) => (k,(v.product/numList(cuisineAverage.indexOf(person))))})
         // for(person <- adjustedAverage ){
         //     for(restaurants <- person){
@@ -71,9 +71,11 @@ object homework4  {
         var next = vars.map{case (k,v) => (localRestaurants.find(_(1) == k), v)}
         next = next.filterKeys(_ != None)
         var (restaurant, score) = next.maxBy(_._2)
-        var hello = restaurant.toArray
-        print("Your party should go to: ")
-        println(hello(0)(0))
+        if (restaurant != None) {
+			var hello = restaurant.toArray
+			print("Your party should go to: ")
+			println(hello(0)(0))
+		}	
         // var tempp  = localRestaurants.find(_(1) == rest) 
         // var restaurant = tempp match {
         //     case None => localRestaurants(1)//Or handle the lack of a value another way: throw an error, etc.
@@ -85,13 +87,27 @@ object homework4  {
         //     println(restaurants)
         // }
         //println("intersects")
-
-        var union = mergeMap(adjustedAverage)((v1, v2) => v1 + v2)
-        
-        for(restaurants <- union){
-            println(restaurants)
-        }
-        println("union")
+		else {
+			var union = mergeMap(adjustedAverage)((v1, v2) => v1 + v2)
+			
+			//for(restaurants <- union){
+			//    println(restaurants)
+			//}
+			//println("union")
+			
+			var filtered = union.map{case (k,v) => (localRestaurants.find(_(1) == k), v)}
+			filtered = filtered.filterKeys(_ != None)
+			var (res, sc) = filtered.maxBy(_._2)
+			if (res != None) {
+				var goodbye = res.toArray
+				print("Your party should go to: ")
+				println(goodbye(0)(0))
+			}
+			else {
+				print("Your party should go to: ")
+				println(localRestaurants(1))
+			}
+		}
     
         //val bufferLocalRes = io.Source.fromFile(arg(0))
         // for (line <- bufferLocalRes.getLines) {
