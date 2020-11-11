@@ -38,11 +38,11 @@ object homework4  {
         var numList = list.map(people => people.length)
         //var list = people.map(person => person.filter{_(1).equals("Chain")})
 
-        for(person <- list){
-            for(restaurants <- person){
-                println(restaurants(1))
-            }
-        }
+        // for(person <- list){
+        //     for(restaurants <- person){
+        //         println(restaurants(1))
+        //     }
+        // }
         
         var bop = list.map(person => person.groupBy(_(2)))
         var cuisineAverage = bop.map( person => person.map{ case (k,v) => (k, List((v.map(_(4).toInt).sum.toDouble/v.length), v.length))})
@@ -66,6 +66,12 @@ object homework4  {
         var templist = adjustedAverage(0).map{ case (k,v) => (k,List(v*0))}
         var intersects = adjustedAverage.map(people => templist = templist.keySet.intersect(people.keySet).map(k => k->(people(k)::templist(k))).toMap)
         println(templist)
+        var (rest, score) = templist.map{ case (k,v) => (k, v.sum)}.max
+        println(rest)
+        var restaurant  = localRestaurants.find(_(1) == rest).toArray
+        for(restaurants <- restaurant){
+            println(restaurants(0))
+        }
         println("intersects")
 
         var union = mergeMap(adjustedAverage)((v1, v2) => v1 + v2)
