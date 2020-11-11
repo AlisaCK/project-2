@@ -92,7 +92,7 @@ object homework4  {
 			var filtered = union.map{case (k,v) => (localRestaurants.find(_(1) == k), v)}
 			filtered = filtered.filterKeys(_ != None)
 			
-			if (filtered.isEmpty) {
+			if (!filtered.isEmpty) {
 				var (res, sc) = filtered.maxBy(_._2)
 				var goodbye = res.toArray
 				print("Your party should go to: ")
