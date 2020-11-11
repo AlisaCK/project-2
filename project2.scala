@@ -27,13 +27,13 @@ object homework4  {
         val tempArgs = args.indices.collect{case i if i > 0 => args(i)} //only the people file
         //create list of lists (unparsed lines)
         val tempPeople = tempArgs.map(arg => io.Source.fromFile(arg).getLines.toList)
-        for(lines <- tempPeople){
-            println(lines(0))
-        }
+        // for(lines <- tempPeople){
+        //     println(lines(0))
+        // }
         people = tempPeople.map(person => person.map(x =>x.split(",").map(_.trim))).toList
-        for(lines <- people){
-            println(lines(1)(0))
-        }
+        // for(lines <- people){
+        //     println(lines(1)(0))
+        // }
         var list = filterChains()
         var numList = list.map(people => people.length)
         //var list = people.map(person => person.filter{_(1).equals("Chain")})
@@ -49,35 +49,42 @@ object homework4  {
         //List[Map[String,List[Array[Int]]]]
         //v is list of restaurants of a type of cuisine
         
-        for(person <- cuisineAverage ){
-            for(restaurants <- person){
-                println(restaurants)
-            }
-            println("wow")
-        }
+        // for(person <- cuisineAverage ){
+        //     for(restaurants <- person){
+        //         println(restaurants)
+        //     }
+        //     println("wow")
+        // }
 
         var adjustedAverage = cuisineAverage.map(person => person.map{case (k,v) => (k,(v.product/numList(cuisineAverage.indexOf(person))))})
-        for(person <- adjustedAverage ){
-            for(restaurants <- person){
-                println(restaurants)
-            }
-            println("wow")
-        }
+        // for(person <- adjustedAverage ){
+        //     for(restaurants <- person){
+        //         println(restaurants)
+        //     }
+        //     println("wow")
+        // }
         var templist = adjustedAverage(0).map{ case (k,v) => (k,List(v*0))}
         var intersects = adjustedAverage.map(people => templist = templist.keySet.intersect(people.keySet).map(k => k->(people(k)::templist(k))).toMap)
-        println(templist)
-        var (rest, score) = templist.map{ case (k,v) => (k, v.sum)}.max
-        println(rest)
-        var tempp  = localRestaurants.find(_(1) == rest) 
-        var restaurant = tempp match {
-            case None => localRestaurants(0)//Or handle the lack of a value another way: throw an error, etc.
-            case Some(v) => v.toArray //return the string to set your value
-        }
-        println(restaurant(0))
-        for(restaurants <- restaurant){
-            println(restaurants)
-        }
-        println("intersects")
+        //println(templist)
+        var vars = templist.map{ case (k,v) => (k, v.sum)}.toSeq.sortBy(_._1).toMap
+        //println(vars)
+        var next = vars.map{case (k,v) => (localRestaurants.find(_(1) == k), v)}
+        next = next.filterKeys(_ != None)
+        var (restaurant, score) = next.maxBy(_._2)
+        var hello = restaurant.toArray
+        print("Your party should go to: ")
+        println(hello(0)(0))
+        // var tempp  = localRestaurants.find(_(1) == rest) 
+        // var restaurant = tempp match {
+        //     case None => localRestaurants(1)//Or handle the lack of a value another way: throw an error, etc.
+        //     case Some(v) => v.toArray //return the string to set your value
+        // }
+        // print("Your party should go to: ")
+        // println(restaurant(0))
+        // for(restaurants <- restaurant){
+        //     println(restaurants)
+        // }
+        //println("intersects")
 
         var union = mergeMap(adjustedAverage)((v1, v2) => v1 + v2)
         
