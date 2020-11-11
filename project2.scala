@@ -68,9 +68,14 @@ object homework4  {
         println(templist)
         var (rest, score) = templist.map{ case (k,v) => (k, v.sum)}.max
         println(rest)
-        var restaurant  = localRestaurants.find(_(1) == rest).toArray
+        var tempp  = localRestaurants.find(_(1) == rest) 
+        var restaurant = tempp match {
+            case None => localRestaurants(0)//Or handle the lack of a value another way: throw an error, etc.
+            case Some(v) => v.toArray //return the string to set your value
+        }
+        println(restaurant(0))
         for(restaurants <- restaurant){
-            println(restaurants(0))
+            println(restaurants)
         }
         println("intersects")
 
