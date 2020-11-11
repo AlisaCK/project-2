@@ -8,6 +8,11 @@ object homework4  {
         return newList
     }
 
+    def mergeMap[A, B](ms: List[Map[A, B]])(f: (B, B) => B): Map[A, B] =
+        (Map[A, B]() /: (for (m <- ms; kv <- m) yield kv)) { (a, kv) =>
+            a + (if (a.contains(kv._1)) kv._1 -> f(a(kv._1), kv._2) else kv)
+        }
+
     def main(args: Array[String]) {
 
         //println("Month, Income, Expenses, Profit")
@@ -58,7 +63,18 @@ object homework4  {
             }
             println("wow")
         }
+        var templist = adjustedAverage(0).map{ case (k,v) => (k,List(v*0))}
+        var intersects = adjustedAverage.map(people => templist = templist.keySet.intersect(people.keySet).map(k => k->(people(k)::templist(k))).toMap)
+        println(templist)
+        println("intersects")
 
+        var union = mergeMap(adjustedAverage)((v1, v2) => v1 + v2)
+        
+        for(restaurants <- union){
+            println(restaurants)
+        }
+        println("union")
+    
         //val bufferLocalRes = io.Source.fromFile(arg(0))
         // for (line <- bufferLocalRes.getLines) {
         //     val cols = line.split(",").map(_.trim)
