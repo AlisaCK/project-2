@@ -1,6 +1,7 @@
 object homework4  {
+    //global variable for local restaurants
     var localRestaurants : List[Array[String]] = List()
-    
+    //global var with list of peoples data
     var people : List[List[Array[String]]] = List()
 
     def filterChains(): List[List[Array[String]]] = { 
@@ -8,6 +9,7 @@ object homework4  {
         return newList
     }
 
+    //funtion to union 2 maps and add their scores together
     def mergeMap[A, B](ms: List[Map[A, B]])(f: (B, B) => B): Map[A, B] =
         (Map[A, B]() /: (for (m <- ms; kv <- m) yield kv)) { (a, kv) =>
             a + (if (a.contains(kv._1)) kv._1 -> f(a(kv._1), kv._2) else kv)
@@ -15,61 +17,54 @@ object homework4  {
 
     def main(args: Array[String]) {
 
-        //println("Month, Income, Expenses, Profit")
-        //first argument load in local restaurants
+        //read in local restaurant file
         val temp: List[String] = io.Source.fromFile(args(0)).getLines.toList
+        //set global variable data
         localRestaurants = temp.map(x => x.split(",").map(_.trim))
 
-        // for(lines <- localRestaurants){
-        //     print(lines(0))
-        // }
-
+        //filter args for only people files
         val tempArgs = args.indices.collect{case i if i > 0 => args(i)} //only the people file
+
         //create list of lists (unparsed lines)
         val tempPeople = tempArgs.map(arg => io.Source.fromFile(arg).getLines.toList)
-        // for(lines <- tempPeople){
-        //     println(lines(0))
-        // }
+        
+        //map data to global variable
         people = tempPeople.map(person => person.map(x =>x.split(",").map(_.trim))).toList
-        // for(lines <- people){
-        //     println(lines(1)(0))
-        // }
+
+        //filter data for only chain restaurants
         var list = filterChains()
         var numList = list.map(people => people.length)
-        //var list = people.map(person => person.filter{_(1).equals("Chain")})
-
-        // for(person <- list){
-        //     for(restaurants <- person){
-        //         println(restaurants(1))
-        //     }
-        // }
         
+        //group results by cuisine type (creates map)
         var bop = list.map(person => person.groupBy(_(2)))
-        var cuisineAverage = bop.map( person => person.map{ case (k,v) => (k, List((v.map(_(4).toInt).sum.toDouble/v.length), v.length))})
+        //creates list of maps for cuisine average
         //List[Map[String,List[Array[Int]]]]
-        //v is list of restaurants of a type of cuisine
+        var cuisineAverage = bop.map( person => person.map{ case (k,v) => (k, List((v.map(_(4).toInt).sum.toDouble/v.length), v.length))})
         
-        // for(person <- cuisineAverage ){
-        //     for(restaurants <- person){
-        //         println(restaurants)
-        //     }
-        //     println("wow")
-        // }
-		println(localRestaurants(1).toArray.toString)
+        //calculate theta for cuisine from averages
         var adjustedAverage = cuisineAverage.map(person => person.map{case (k,v) => (k,(v.product/numList(cuisineAverage.indexOf(person))))})
-        // for(person <- adjustedAverage ){
-        //     for(restaurants <- person){
-        //         println(restaurants)
-        //     }
-        //     println("wow")
-        // }
-        var templist = adjustedAverage(0).map{ case (k,v) => (k,List(v*0))}
-        var intersects = adjustedAverage.map(people => templist = templist.keySet.intersect(people.keySet).map(k => k->(people(k)::templist(k))).toMap)
-        //println(templist)
-        var vars = templist.map{ case (k,v) => (k, v.sum)}.toSeq.sortBy(_._1).toMap
-        //println(vars)
+        
+        //intersect peoples's cuisine preferences
+        //map will only contain cuisine that is owned by everyone
+        var intersects = adjustedAverage(0).map{ case (k,v) => (k,List(v*0))}
+        var templist = adjustedAverage.map(people => intersects = intersects.keySet.intersect(people.keySet).map(k => k->(people(k)::intersects(k))).toMap)
+        
+        //sort map alphabetically
+        //vars is alphabetical map
+        var vars = intersects.map{ case (k,v) => (k, v.sum)}.toSeq.sortBy(_._1).toMap
+        
+        //find coorisponding local restaurants and set them to key values
+        //if restaurant not found, key is set to None
         var next = vars.map{case (k,v) => (localRestaurants.find(_(1) == k), v)}
+
+        //filter out cuisines that could not be found
         next = next.filterKeys(_ != None)
+
+        //--------------------TRAY------------------------------
+        //CHECK IF NEXT IS EMPTY FOR IF STATEMENT HERE
+
+        //retrieve restaurant with highest score
+        //if there are no restaurants, maxBy throws error so must check for no restaurants before this 
         var (restaurant, score) = next.maxBy(_._2)
         if (restaurant != None) {
 			var hello = restaurant.toArray
@@ -104,10 +99,14 @@ object homework4  {
 				println(goodbye(0)(0))
 			}
 			else {
+				var name = restaurant.toArray
 				print("Your party should go to: ")
-				println(localRestaurants(1))
+				println(name(0)(0))
 			}
 		}
+
+        //logistics to retrieve restaurant name
+        
     
         //val bufferLocalRes = io.Source.fromFile(arg(0))
         // for (line <- bufferLocalRes.getLines) {
